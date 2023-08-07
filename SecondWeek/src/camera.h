@@ -28,8 +28,9 @@ public:
   ray get_ray(double s, double t) const {
     vec3 rd = lens_radius * random_in_unit_disk();
     vec3 offset = u * rd.x() + v * rd.y();
-
-    return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - (origin + offset));
+    auto ray_time = random_double();
+    // 在随机时间（0-1）之间生成一根光线去获得颜色
+    return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - (origin + offset), ray_time);
   }
 
 private:

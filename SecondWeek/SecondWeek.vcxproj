@@ -119,6 +119,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +137,7 @@
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\hittable.h" />
     <ClInclude Include="src\hittable_list.h" />
+    <ClInclude Include="src\interval.h" />
     <ClInclude Include="src\material.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\sphere.h" />

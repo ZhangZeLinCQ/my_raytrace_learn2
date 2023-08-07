@@ -25,8 +25,10 @@ hittable_list random_scene() {
         if (choose_mat < 0.8) {
           // diffuse
           auto albedo = color::random() * color::random();
+          auto center2 = center + vec3(0, random_double(0, .5), 0);
           sphere_material = make_shared<lambertian>(albedo);
-          world.add(make_shared<sphere>(center, 0.2, sphere_material));
+          // 加入时间区间
+          world.add(make_shared<sphere>(center, center2, 0.2, sphere_material));
         }
         else if (choose_mat < 0.95) {
           // metal
@@ -87,9 +89,9 @@ int main() {
   // Image
   
   const auto aspect_ratio = 16.0 / 9.0; // 3.0 / 2.0;
-  const long long image_width = 200;// 1200;
+  const long long image_width = 400;// 1200;
   const long long image_height = static_cast<long long>(image_width / aspect_ratio);
-  const int samples_per_pixel = 50;// 500;
+  const int samples_per_pixel = 100;// 500;
   const int max_depth = 50;
 
   // World
@@ -97,7 +99,7 @@ int main() {
   auto R = cos(pi / 4);
   hittable_list world;
 
-  switch (0) {
+  switch (3) {
   case 0: {
     auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
@@ -146,7 +148,7 @@ int main() {
       for (int s = 0; s < samples_per_pixel; ++s) {
         auto u = (i + random_double()) / (image_width - 1);
         auto v = (j + random_double()) / (image_height - 1);
-        ray r = cam.get_ray(u, v);
+        ray r = cam.get_ray(u, v); // get_ray 时 生成随机时间的线
         pixel_color += ray_color(r, world, max_depth);
       }
       write_color6(out, pixel_color, samples_per_pixel);
