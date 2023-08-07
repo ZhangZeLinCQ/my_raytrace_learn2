@@ -86,10 +86,10 @@ int main() {
 
   // Image
   
-  const auto aspect_ratio = 3.0 / 2.0;
-  const long long image_width = 1200;
+  const auto aspect_ratio = 16.0 / 9.0; // 3.0 / 2.0;
+  const long long image_width = 200;// 1200;
   const long long image_height = static_cast<long long>(image_width / aspect_ratio);
-  const int samples_per_pixel = 500;
+  const int samples_per_pixel = 50;// 500;
   const int max_depth = 50;
 
   // World
@@ -97,7 +97,7 @@ int main() {
   auto R = cos(pi / 4);
   hittable_list world;
 
-  switch (3) {
+  switch (0) {
   case 0: {
     auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
