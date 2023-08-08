@@ -2,11 +2,12 @@
 #define MATERIAL_H
 
 #include "common.h"
+#include "texture.h"
 
 struct hit_record;
 
-// 生成一个散射光线scattered
-// 发生散射时光线的衰减attenuation（颜色）
+// scattered：生成一个散射光线scattered
+// attenuation：发生散射时光线的衰减attenuation（颜色）
 class material {
 public:
   virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const = 0;
@@ -15,7 +16,8 @@ public:
 // Lambertian漫反射材质
 class lambertian : public material {
 public:
-  lambertian(const color& a) : albedo(a) {}
+  lambertian(const color& a) : albedo(make_shared<solid_color>(a)) {} // 可以传入颜色 转换为材质
+  lambertian(shared_ptr<texture> a) : albedo(a) {} // 直接传入材质
 
   virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override {
     // 此值可能为0
@@ -26,14 +28,14 @@ public:
     // Catch degenerate scatter direction
     if (scatter_direction.near_zero())
       scatter_direction = rec.normal;
-
+    
     scattered = ray(rec.p, scatter_direction, r_in.time());
-    attenuation = albedo;
+    attenuation = albedo->value(rec.u, rec.v, rec.p); // 在此获得材质上某位置的颜色
     return true;
   }
 
 public:
-  color albedo;
+  shared_ptr<texture> albedo; // 从单一颜色变为材质（根据位置获得颜色等数据）
 };
 
 // 金属材质

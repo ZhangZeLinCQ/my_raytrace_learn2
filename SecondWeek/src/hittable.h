@@ -12,6 +12,10 @@ struct hit_record {
   vec3 normal; // 击中处法向量
   shared_ptr<material> mat_ptr;
   double t;
+
+  // 光线和物体击中点的表面坐标uv
+  double u;
+  double v;
   bool front_face; 
 
   inline void set_face_normal(const ray& r, const vec3& outward_normal) {
