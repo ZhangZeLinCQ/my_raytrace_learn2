@@ -7,6 +7,7 @@
 #include "sphere.h"
 #include "camera.h"
 #include "material.h"
+#include "bvh.h"
 
 hittable_list random_scene() {
   hittable_list world;
@@ -70,7 +71,7 @@ color ray_color(const ray& r, const hittable& world, int depth) {
     return color(0, 0, 0);
 
   // 渲染击中物体
-  if (world.hit(r, 0.001, infinity, rec)) { //0 -> 0.001 solve shadow acne problem
+  if (world.hit(r, interval(0.001, infinity), rec)) { //0 -> 0.001 solve shadow acne problem
     ray scattered;
     color attenuation;
     if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
@@ -125,6 +126,8 @@ int main() {
     world = random_scene();
     break;
   }
+  world = hittable_list(make_shared<bvh_node>(world));
+
 
 
   // Camera

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "ray.h"
+#include "aabb.h"
 
 class material;
 
@@ -21,8 +22,12 @@ struct hit_record {
 
 class hittable {
 public:
+  virtual ~hittable() = default;
+
   //  the hit only “counts” if t_min < t < t_max
-  virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const = 0;
+  virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const = 0;
+
+  virtual aabb bounding_box() const = 0; // 所有可碰撞物体要实现aab方法以支持bvh查询
 };
 
 #endif

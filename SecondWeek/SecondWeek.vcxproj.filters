@@ -50,5 +50,11 @@
     <ClInclude Include="src\interval.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\aabb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bvh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
