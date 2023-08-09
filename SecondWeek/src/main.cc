@@ -10,7 +10,7 @@
 #include "bvh.h"
 #include "texture.h"
 
-hittable_list random_scene() {
+void random_spheres() {
   hittable_list world;
 
   //auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
@@ -63,71 +63,7 @@ hittable_list random_scene() {
   auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
   world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
 
-  return world;
-}
-
-// 设置递归深度（光线反射次数）
-color ray_color(const ray& r, const hittable& world, int depth) {
-  hit_record rec;
-
-  // If we've exceeded the ray bounce limit, no more light is gathered.
-  if (depth <= 0)
-    return color(0, 0, 0);
-
-  // 渲染击中物体
-  if (world.hit(r, interval(0.001, infinity), rec)) { //0 -> 0.001 solve shadow acne problem
-    ray scattered;
-    color attenuation;
-    if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
-      return attenuation * ray_color(scattered, world, depth - 1); // 计算颜色
-    return color(0, 0, 0);
-  }
-
-  // 渲染天空
-  vec3 unit_direction = unit_vector(r.direction());
-  auto t = 0.5 * (unit_direction.y() + 1.0);
-  return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
-}
-
-int main() {
-
-  // World
-
-  auto R = cos(pi / 4);
-  hittable_list world;
-
-  switch (3) {
-  case 0: {
-    auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
-    auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
-    auto material_left = make_shared<dielectric>(1.5);
-    auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2), 0.0);
-
-    world.add(make_shared<sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));
-    world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), 0.5, material_center));
-    world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
-    world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), -0.4, material_left));
-    world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
-  }
-        break;
-  case 1: {
-    auto material_left = make_shared<lambertian>(color(0, 0, 1));
-    auto material_right = make_shared<lambertian>(color(1, 0, 0));
-
-    world.add(make_shared<sphere>(point3(-R, 0, -1), R, material_left));
-    world.add(make_shared<sphere>(point3(R, 0, -1), R, material_right));
-  }
-        break;
-  default:
-    world = random_scene();
-    break;
-  }
-  world = hittable_list(make_shared<bvh_node>(world));
-
-
-
   // Camera
-
   camera cam;
 
   cam.aspect_ratio = 16.0 / 9.0;
@@ -144,6 +80,37 @@ int main() {
   cam.focus_dist = 10.0;
 
   cam.render(world);
+}
 
+void two_spheres() {
+  hittable_list world;
+
+  auto checker = make_shared<checker_texture>(0.8, color(.2, .3, .1), color(.9, .9, .9));
+
+  world.add(make_shared<sphere>(point3(0, -10, 0), 10, make_shared<lambertian>(checker)));
+  world.add(make_shared<sphere>(point3(0, 10, 0), 10, make_shared<lambertian>(checker)));
+
+  camera cam;
+
+  cam.aspect_ratio = 16.0 / 9.0;
+  cam.image_width = 400;
+  cam.samples_per_pixel = 100;
+  cam.max_depth = 50;
+
+  cam.vfov = 20;
+  cam.lookfrom = point3(13, 2, 3);
+  cam.lookat = point3(0, 0, 0);
+  cam.vup = vec3(0, 1, 0);
+
+  cam.defocus_angle = 0;
+
+  cam.render(world);
+}
+
+int main() {
+  switch (2) {
+  case 1: random_spheres(); break;
+  case 2: two_spheres();    break;
+  }
   return 0;
 }
