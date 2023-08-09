@@ -91,14 +91,6 @@ color ray_color(const ray& r, const hittable& world, int depth) {
 
 int main() {
 
-  // Image
-  
-  const auto aspect_ratio = 16.0 / 9.0; // 3.0 / 2.0;
-  const long long image_width = 400;// 1200;
-  const long long image_height = static_cast<long long>(image_width / aspect_ratio);
-  const int samples_per_pixel = 100;// 500;
-  const int max_depth = 50;
-
   // World
 
   auto R = cos(pi / 4);
@@ -136,33 +128,22 @@ int main() {
 
   // Camera
 
-  point3 lookfrom(13, 2, 3);
-  point3 lookat(0, 0, 0);
-  vec3 vup(0, 1, 0);
-  auto dist_to_focus = 10.0;
-  auto aperture = 0.1;
+  camera cam;
 
-  camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
+  cam.aspect_ratio = 16.0 / 9.0;
+  cam.image_width = 1200;
+  cam.samples_per_pixel = 10;
+  cam.max_depth = 20;
 
-  // Render
+  cam.vfov = 20;
+  cam.lookfrom = point3(13, 2, 3);
+  cam.lookat = point3(0, 0, 0);
+  cam.vup = vec3(0, 1, 0);
 
-  std::ofstream out("image.ppm", std::ios::out | std::ios::binary);
-  out << "P6\n" << image_width << ' ' << image_height << "\n255\n";
-  for (int j = image_height - 1; j >= 0; --j) {// The rows are written out from top to bottom
-    std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-    for (int i = 0; i < image_width; ++i) { // The pixels are written out in rows with pixels left to right
-      color pixel_color(0, 0, 0);
-      for (int s = 0; s < samples_per_pixel; ++s) {
-        auto u = (i + random_double()) / (image_width - 1);
-        auto v = (j + random_double()) / (image_height - 1);
-        ray r = cam.get_ray(u, v); // get_ray 时 生成随机时间的线
-        pixel_color += ray_color(r, world, max_depth);
-      }
-      write_color6(out, pixel_color, samples_per_pixel);
-    }
-  }
-  out.close();
-  std::cerr << "\nDone.\n";
+  cam.defocus_angle = 0.6;
+  cam.focus_dist = 10.0;
+
+  cam.render(world);
 
   return 0;
 }
