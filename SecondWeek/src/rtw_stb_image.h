@@ -24,9 +24,12 @@ public:
     // images/ subdirectory, then the _parent's_ images/ subdirectory, and then _that_
     // parent, on so on, for six levels up. If the image was not loaded successfully,
     // width() and height() will return 0.
-
     auto filename = std::string(image_filename);
-    auto imagedir = getenv("RTW_IMAGES");
+
+    char* value = NULL;
+    size_t sz = 0;
+    _dupenv_s(&value, &sz, "RTW_IMAGES");
+    auto imagedir = value;
 
     // Hunt for the image file in some likely locations.
     if (imagedir && load(std::string(imagedir) + "/" + image_filename)) return;
