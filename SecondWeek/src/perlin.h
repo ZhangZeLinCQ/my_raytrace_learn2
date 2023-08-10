@@ -24,9 +24,9 @@ public:
   }
 
   double noise(const point3& p) const {
-    auto i = static_cast<int>(4 * p.x()) & 255;
-    auto j = static_cast<int>(4 * p.y()) & 255;
-    auto k = static_cast<int>(4 * p.z()) & 255;
+    auto i = static_cast<int>(p.x()) & 255;
+    auto j = static_cast<int>(p.y()) & 255;
+    auto k = static_cast<int>(p.z()) & 255;
     // 根据p坐标获得确定的一个值，然后返回ranfloat中该值对应的随机值
     return ranfloat[perm_x[i] ^ perm_y[j] ^ perm_z[k]];
   }
