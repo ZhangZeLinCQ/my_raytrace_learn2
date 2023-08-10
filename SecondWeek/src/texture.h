@@ -87,7 +87,9 @@ public:
 
   color value(double u, double v, const point3& p) const override {
     //return color(1, 1, 1) * noise.noise(scale * p);
-    return color(1, 1, 1) * noise.noise_Hermite(scale * p);
+    //return color(1, 1, 1) * noise.noise_Hermite(scale * p);
+    // 柏林噪声返回可能为负值，所以矫正为正数
+    return color(1, 1, 1) * 0.5 * (1.0 + noise.noise_Perlin(scale * p));
   }
 
 private:
