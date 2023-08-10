@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "rtw_stb_image.h"
+#include "perlin.h"
 
 class texture {
 public:
@@ -51,6 +52,7 @@ private:
   shared_ptr<texture> odd;
 };
 
+
 // 以图象为材质
 class image_texture : public texture {
 public:
@@ -75,4 +77,19 @@ public:
 private:
   rtw_image image;
 };
+
+// 以噪声图像作为纹理
+class noise_texture : public texture {
+public:
+  noise_texture() {}
+
+  color value(double u, double v, const point3& p) const override {
+    return color(1, 1, 1) * noise.noise(p);
+  }
+
+private:
+  perlin noise;
+};
+
+
 #endif
