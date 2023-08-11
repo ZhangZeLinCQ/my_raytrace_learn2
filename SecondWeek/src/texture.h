@@ -86,10 +86,12 @@ public:
   noise_texture(double sc = 4) : scale(sc) {}
 
   color value(double u, double v, const point3& p) const override {
-    //return color(1, 1, 1) * noise.noise(scale * p);
-    //return color(1, 1, 1) * noise.noise_Hermite(scale * p);
+    auto s = scale * p;
+    //return color(1, 1, 1) * noise.noise(s);
+    //return color(1, 1, 1) * noise.noise_Hermite(s);
     // 柏林噪声返回可能为负值，所以矫正为正数
-    return color(1, 1, 1) * 0.5 * (1.0 + noise.noise_Perlin(scale * p));
+    //return color(1, 1, 1) * 0.5 * (1.0 + noise.noise_Perlin(s));
+    return color(1, 1, 1) * noise.turb(s);
   }
 
 private:
