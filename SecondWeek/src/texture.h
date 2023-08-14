@@ -91,7 +91,8 @@ public:
     //return color(1, 1, 1) * noise.noise_Hermite(s);
     // 柏林噪声返回可能为负值，所以矫正为正数
     //return color(1, 1, 1) * 0.5 * (1.0 + noise.noise_Perlin(s));
-    return color(1, 1, 1) * noise.turb(s);
+    //return color(1, 1, 1) * noise.turb(s);
+    return color(1, 1, 1) * 0.5 * (1 + sin(s.z() + 10 * noise.turb(s)));
   }
 
 private:
