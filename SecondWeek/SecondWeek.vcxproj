@@ -145,6 +145,7 @@
     <ClInclude Include="src\interval.h" />
     <ClInclude Include="src\material.h" />
     <ClInclude Include="src\perlin.h" />
+    <ClInclude Include="src\quad.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\rtw_stb_image.h" />
     <ClInclude Include="src\sphere.h" />

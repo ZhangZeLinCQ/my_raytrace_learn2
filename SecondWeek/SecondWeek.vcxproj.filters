@@ -71,6 +71,9 @@
     <ClInclude Include="src\perlin.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\quad.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="image.ppm" />
