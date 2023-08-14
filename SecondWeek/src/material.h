@@ -10,6 +10,10 @@ struct hit_record;
 // attenuation：发生散射时光线的衰减attenuation（颜色）
 class material {
 public:
+  virtual color emitted(double u, double v, const point3& p) const { 
+    return color(0, 0, 0); // not all the non-emitting materials implement emitted(); the base class return black.
+  }
+
   virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const = 0;
 };
 
@@ -91,5 +95,24 @@ private:
     r0 = r0 * r0;
     return r0 + (1 - r0) * pow((1 - cosine), 5);
   }
+};
+
+// 慢反射光、一种发光材质
+class diffuse_light : public material {
+public:
+  diffuse_light(shared_ptr<texture> a) : emit(a) {}
+  diffuse_light(color c) : emit(make_shared<solid_color>(c)) {}
+
+  // 不处理照上去的光线
+  bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override {
+    return false;
+  }
+
+  color emitted(double u, double v, const point3& p) const override {
+    return emit->value(u, v, p);
+  }
+
+private:
+  shared_ptr<texture> emit;
 };
 #endif
