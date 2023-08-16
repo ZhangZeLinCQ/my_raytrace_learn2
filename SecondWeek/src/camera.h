@@ -132,8 +132,13 @@ private:
     hit_record rec;
 
     // If the ray hits nothing, return the background color.
-    if (!world.hit(r, interval(0.001, infinity), rec)) //0 -> 0.001 solve shadow acne problem
+    if (!world.hit(r, interval(0.001, infinity), rec)) { //0 -> 0.001 solve shadow acne problem
+      //// 渲染天空
+      //vec3 unit_direction = unit_vector(r.direction());
+      //auto a = 0.5 * (unit_direction.y() + 1.0);
+      //return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
       return background;
+    }
 
     // 渲染击中物体
     ray scattered;
@@ -144,6 +149,7 @@ private:
 
     color color_from_scatter = attenuation * ray_color(scattered, depth - 1, world);
     return color_from_emission + color_from_scatter;
+
   }
 };
 #endif
