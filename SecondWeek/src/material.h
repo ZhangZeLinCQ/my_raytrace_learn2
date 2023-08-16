@@ -10,6 +10,7 @@ struct hit_record;
 // attenuation：发生散射时光线的衰减attenuation（颜色）
 class material {
 public:
+  // 发出的光：默认不发光，发光材质另写
   virtual color emitted(double u, double v, const point3& p) const { 
     return color(0, 0, 0); // not all the non-emitting materials implement emitted(); the base class return black.
   }
