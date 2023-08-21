@@ -222,9 +222,10 @@ void simple_light() {
   cam.render(world);
 }
 
+// 康奈尔盒子
 void cornell_box() {
   hittable_list world;
-
+  // 漫反射材质(设置颜色)
   auto red = make_shared<lambertian>(color(.65, .05, .05));
   auto white = make_shared<lambertian>(color(.73, .73, .73));
   auto green = make_shared<lambertian>(color(.12, .45, .15));
@@ -236,6 +237,10 @@ void cornell_box() {
   world.add(make_shared<quad>(point3(0, 0, 0), vec3(555, 0, 0), vec3(0, 0, 555), white));
   world.add(make_shared<quad>(point3(555, 555, 555), vec3(-555, 0, 0), vec3(0, 0, -555), white));
   world.add(make_shared<quad>(point3(0, 0, 555), vec3(555, 0, 0), vec3(0, 555, 0), white));
+
+  // 加入两个矩形
+  world.add(box(point3(130, 0, 65), point3(295, 165, 230), white));
+  world.add(box(point3(265, 0, 295), point3(430, 330, 460), white));
 
   camera cam;
 
