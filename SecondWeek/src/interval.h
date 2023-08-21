@@ -47,6 +47,4 @@ interval operator+(const interval& ival, double displacement) {
 interval operator+(double displacement, const interval& ival) {
   return ival + displacement;
 }
-
-
 #endif
