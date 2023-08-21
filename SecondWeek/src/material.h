@@ -116,4 +116,21 @@ public:
 private:
   shared_ptr<texture> emit;
 };
+
+// 一种随机散射光线的材质
+class isotropic : public material {
+public:
+  isotropic(color c) : albedo(make_shared<solid_color>(c)) {}
+  isotropic(shared_ptr<texture> a) : albedo(a) {}
+
+  bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered)
+    const override {
+    scattered = ray(rec.p, random_unit_vector(), r_in.time()); // 随机的散射光方向
+    attenuation = albedo->value(rec.u, rec.v, rec.p);
+    return true;
+  }
+
+private:
+  shared_ptr<texture> albedo;
+};
 #endif
